@@ -1,7 +1,11 @@
-from flask import Flask, request
+from flask import Flask, request, render_template
 import sqlite3
 
 app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return render_template("login.html")
 
 @app.route("/login", methods=["POST"])
 def login():
@@ -12,6 +16,7 @@ def login():
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM users WHERE username=? AND password=?", (username, password))
     result = cursor.fetchone()
+    conn.close()
 
     if result:
         return "Login successful"
